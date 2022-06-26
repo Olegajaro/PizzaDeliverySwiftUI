@@ -11,13 +11,15 @@ struct MainTabBar: View {
     var body: some View {
         TabView {
             
-            MenuView()
-                .tabItem {
-                    VStack {
-                        Image(systemName: "menucard")
-                        Text("Menu")
-                    }
+            NavigationView {
+                MenuView()
+            }
+            .tabItem {
+                VStack {
+                    Image(systemName: "menucard")
+                    Text("Menu")
                 }
+            }
             
             CartView()
                 .tabItem {
