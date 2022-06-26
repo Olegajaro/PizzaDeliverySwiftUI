@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isAuth = true
+    
     @State private var email = ""
     @State private var password = ""
+    @State private var confirmPassword = ""
     
     var body: some View {
         VStack(spacing: 20) {
-            Text("Authorization")
-                .padding()
+            Text(isAuth ? "Authorization" : "Registration")
+                .padding(isAuth ? 16 : 24)
                 .padding(.horizontal, 30)
                 .font(.title2.bold())
                 .background(Color("whiteAlpha"))
-                .cornerRadius(30)
+                .cornerRadius(isAuth ? 30 : 60)
             
             VStack {
                 TextField("Enter Email", text: $email)
@@ -35,10 +38,23 @@ struct ContentView: View {
                     .padding(8)
                     .padding(.horizontal, 12)
                 
+                if !isAuth {
+                    SecureField("Repeat Password", text: $confirmPassword)
+                        .padding()
+                        .background(Color("whiteAlpha"))
+                        .cornerRadius(12)
+                        .padding(8)
+                        .padding(.horizontal, 12)
+                }
+                
                 Button {
-                    print("authorization")
+                    if isAuth {
+                        print("authorization")
+                    } else {
+                        print("registration")
+                    }
                 } label: {
-                    Text("Sign In")
+                    Text(isAuth ? "Sign In" : "Create account")
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(LinearGradient(
@@ -54,9 +70,9 @@ struct ContentView: View {
                 }
                 
                 Button {
-                    print("sign up")
+                    isAuth.toggle()
                 } label: {
-                    Text("Not with us yet? Sign up!")
+                    Text(isAuth ? "Not with us yet? Sign up!" : "Already have account!")
                         .padding(.horizontal)
                         .frame(maxWidth: .infinity)
                         .padding(8)
@@ -69,9 +85,13 @@ struct ContentView: View {
             .padding(.top, 16)
             .background(Color("whiteAlpha"))
             .cornerRadius(24)
-            .padding(30)
+            .padding(isAuth ? 30 : 12)
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Image("background")).ignoresSafeArea()
+            .background(Image("background")
+                .ignoresSafeArea()
+                .blur(radius: isAuth ? 0 : 6)
+            )
+            .animation(Animation.easeInOut(duration: 0.25), value: isAuth)
     }
 }
 
